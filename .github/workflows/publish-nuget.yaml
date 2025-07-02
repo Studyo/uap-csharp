@@ -24,13 +24,13 @@ jobs:
           echo "TAG_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore UAParser/UAParser.csproj
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build UAParser/UAParser.csproj --configuration Release --no-restore
 
       - name: Pack NuGet package
-        run: dotnet pack --configuration Release --no-build --output ./nupkg /p:PackageVersion=${{ env.TAG_VERSION }}
+        run: dotnet pack UAParser/UAParser.csproj --configuration Release --no-build --output ./nupkg /p:PackageVersion=${{ env.TAG_VERSION }}
 
       - name: Add GitHub Packages source
         run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
